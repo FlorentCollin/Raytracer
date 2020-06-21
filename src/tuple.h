@@ -11,13 +11,15 @@ class Tuple {
     Tuple(double t_x, double t_y, double t_z, double t_w)
         : x{t_x}, y{t_y}, z{t_z}, w{t_w} {}
 
-    Tuple operator+(const Tuple& other) {
-        return Tuple(x + other.x, y + other.y, z + other.z, w + other.w);
-    }
-
-    Tuple operator-(const Tuple& other) {
-        return Tuple(x - other.x, y - other.y, z - other.z, w - other.w);
-    }
+    bool operator==(const Tuple& other);
+    Tuple operator+(const Tuple& other);
+    Tuple operator-(const Tuple& other);
+    Tuple operator-();
+    Tuple operator*(const double scalar);
+    Tuple operator/(const double scalar);
+    double magnitude();
+    void normalize();
+    double dot(const Tuple& other);
 };
 
 class Point : public Tuple {
@@ -28,8 +30,9 @@ public:
 
 class Vector : public Tuple {
    public:
-    Vector(double t_x, double t_y, double t_z) : Tuple(t_x, t_y, t_z, 1) {}
+    Vector(double t_x, double t_y, double t_z) : Tuple(t_x, t_y, t_z, 0) {}
     Vector(const Tuple& t) : Tuple(t) {}
+    Vector cross(const Vector& v);
 };
 
 #endif  // TUPLE_H

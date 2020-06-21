@@ -1,22 +1,21 @@
 #include <type_traits>
+#include <math.h>
 
 #include "gtest/gtest.h"
 #include "tuple.h"
 
+constexpr double EPSILON = 1e-5;
+
 TEST(TupleTest, PointTest) {
     Point p(4.3, -4.2, 3.1);
-    EXPECT_EQ(p.x, 4.3);
-    EXPECT_EQ(p.y, -4.2);
-    EXPECT_EQ(p.z, 3.1);
-    EXPECT_EQ(p.w, 1) << "A point should have a member `w` = 1";
+    Tuple expected(4.3, -4.2, 3.1, 1);
+    EXPECT_TRUE(p == expected);
 }
 
 TEST(TupleTest, VectorTest) {
     Vector v(1, 2, 3);
-    EXPECT_EQ(v.x, 1);
-    EXPECT_EQ(v.y, 2);
-    EXPECT_EQ(v.z, 3);
-    EXPECT_EQ(v.w, 0) << "A point should have a member `w` = 0";
+    Tuple expected(1, 2, 3, 0);
+    EXPECT_TRUE(v == expected);
 }
 
 TEST(TupleTest, PointInheritedFromTuple) {
@@ -32,20 +31,103 @@ TEST(TupleTest, VectorInheritedFromTuple) {
 TEST(TupleTest, TupleAddition) {
     Tuple t1(3, -2, 5, 1);
     Tuple t2(-2, 3, 1, 0);
-    Tuple add_t = t1 + t2;
-    EXPECT_EQ(add_t.x, 1);
-    EXPECT_EQ(add_t.y, 1);
-    EXPECT_EQ(add_t.z, 6);
-    EXPECT_EQ(add_t.w, 1) << "The addition of a Point and a Vector should be a "
-                             "Point consequently w must be equal to 1";
+    Tuple expected(1, 1, 6, 1);
+    EXPECT_TRUE(t1 + t2 == expected);
 }
 
-TEST(TupleTest, TupleSubtraction) {
+TEST(TupleTest, PointSubstraction) {
     Point p1(3, 2, 1);
     Point p2(5, 6, 7);
-    Vector add_t = p1 - p2;
-    EXPECT_EQ(add_t.x, -2);
-    EXPECT_EQ(add_t.y, -4);
-    EXPECT_EQ(add_t.z, -6);
-    EXPECT_EQ(add_t.w, 0);
+    Tuple expected(-2, -4, -6, 0);
+    EXPECT_TRUE(p1 - p2 == expected);
+}
+
+TEST(TupleTest, VectorPointSubstraction) {
+    Point p(3, 2, 1);
+    Vector v(5, 6, 7);
+    Tuple expected(-2, -4, -6, 1);
+    EXPECT_TRUE(p - v == expected);
+}
+
+TEST(TupleTest, VectorSubstraction) {
+    Vector v1(3, 2, 1);
+    Vector v2(5, 6, 7);
+    Tuple expected(-2, -4, -6, 0);
+    EXPECT_TRUE(v1 - v2 == expected);
+}
+
+TEST(TupleTest, TupleNegation) {
+    Tuple t(1, -2, 3, -4);
+    Tuple expected(-1, 2, -3, 4);
+    EXPECT_TRUE(-t == expected);
+}
+
+TEST(TupleTest, TupleMultipliedByAScalar) {
+    Tuple t(1, -2, 3, -4);
+    Tuple expected(3.5, -7, 10.5, -14);
+    EXPECT_TRUE(t * 3.5 == expected);
+}
+
+TEST(TupleTest, TupleMultipliedByAFraction) {
+    Tuple t(1, -2, 3, -4);
+    Tuple expected(0.5, -1, 1.5, -2);
+    EXPECT_TRUE(t * 0.5 == expected);
+}
+
+TEST(TupleTest, TupleDividedByAScalar) {
+    Tuple t(1, -2, 3, -4);
+    Tuple expected(0.5, -1, 1.5, -2);
+    EXPECT_TRUE(t / 2 == expected);
+}
+
+TEST(TupleTest, Magnitude1) {
+    Vector t(1, 0, 0);
+    EXPECT_LE(abs(1 - t.magnitude()), EPSILON);
+}
+
+TEST(TupleTest, Magnitude2) {
+    Vector t(0, 1, 0);
+    EXPECT_LE(abs(1 - t.magnitude()), EPSILON);
+}
+
+TEST(TupleTest, Magnitude3) {
+    Vector t(0, 0, 1);
+    EXPECT_LE(abs(1 - t.magnitude()), EPSILON);
+}
+TEST(TupleTest, Magnitude4) {
+    Vector t(1, 2, 3);
+    EXPECT_LE(abs(std::sqrt(14) - t.magnitude()), EPSILON);
+}
+
+TEST(TupleTest, Magnitude5) {
+    Vector t(-1, -2, -3);
+    EXPECT_LE(abs(std::sqrt(14) - t.magnitude()), EPSILON);
+}
+
+TEST(TupleTest, Normalize1) {
+    Vector v(4, 0, 0);
+    v.normalize();
+    EXPECT_LE(abs(1 - v.magnitude()), EPSILON);
+    EXPECT_TRUE(v == Vector(1, 0, 0));
+}
+
+TEST(TupleTest, Normalize2) {
+    Vector v(1, 2, 3);
+    v.normalize();
+    EXPECT_LE(abs(1 - v.magnitude()), EPSILON);
+    double sq_14 = std::sqrt(14);
+    EXPECT_TRUE(v == Vector(1/sq_14, 2/sq_14, 3/sq_14));
+}
+
+TEST(TupleTest, DotProduct1) {
+    Vector v1(1, 2, 3);
+    Vector v2(2, 3, 4);
+    EXPECT_LE(abs(20 - v1.dot(v2)), EPSILON);
+}
+
+TEST(TupleTest, Cross) {
+    Vector a(1, 2, 3);
+    Vector b(2, 3, 4);
+    EXPECT_TRUE(a.cross(b) == Vector(-1, 2, -1));
+    EXPECT_TRUE(b.cross(a) == Vector(1, -2, 1));
 }
