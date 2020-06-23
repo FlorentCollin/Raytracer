@@ -1,5 +1,8 @@
+#include <math.h>
+
 #include <iostream>
 
+#include "canvas.h"
 #include "tuple.h"
 
 struct Projectile {
@@ -22,11 +25,18 @@ Projectile tick(Environment env, Projectile proj) {
 }
 
 int main() {
-    Projectile proj(Point(0, 0, 0), Vector(1, 1, 0));
+    Vector velocity(1, 1.8, 0);
+    velocity.normalize();
+    velocity = velocity * 11.25;
+    Projectile proj(Point(0, 1, 0), velocity);
     Environment env(Vector(0, -0.1, 0), Vector(-0.01, 0, 0));
-    std::printf("%d %.4f %.4f\n", 0, proj.position.x, proj.position.y);
-    for(int i = 1; proj.position.y >= 0; i++) {
+    Canvas canvas(900, 500);
+    Color c(1, 0.5, 0);
+    for (int i = 0; proj.position.y() >= 0; i++) {
+        canvas.write_pixel(
+            std::round(proj.position.x()),
+            canvas.get_height() - 1 - std::round(proj.position.y()), c);
         proj = tick(env, proj);
-        std::printf("%d %.4f %.4f\n", i, proj.position.x, proj.position.y);
     }
+    std::cout << canvas.to_PPM() << '\n';
 }
