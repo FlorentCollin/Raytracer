@@ -115,7 +115,6 @@ TEST(TupleTest, Normalize1) {
 TEST(TupleTest, Normalize2) {
     Vector v(1, 2, 3);
     v.normalize();
-    std::cout << v.magnitude() << '\n';
     EXPECT_LE(abs(1 - v.magnitude()), EPSILON);
     double sq_14 = std::sqrt(14);
     EXPECT_TRUE(v == Vector(1 / sq_14, 2 / sq_14, 3 / sq_14));

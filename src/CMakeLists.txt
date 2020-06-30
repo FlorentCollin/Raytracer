@@ -19,7 +19,8 @@ set(CXX_COMPILE_FLAGS
     -Wpedantic
     -Wconversion
     -Wsign-conversion
-    -Wdouble-promotion)
+    -Wdouble-promotion
+    -fcolor-diagnostics)
 target_compile_options(${BINARY}_run PRIVATE ${CXX_COMPILE_FLAGS})
 
 add_library(${BINARY}_lib STATIC ${SOURCES})

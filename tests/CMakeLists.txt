@@ -19,7 +19,8 @@ set(CXX_COMPILE_FLAGS
     -Wpedantic
     -Wconversion
     -Wsign-conversion
-    -Wdouble-promotion)
+    -Wdouble-promotion
+    -fcolor-diagnostics)
 target_compile_options(${BINARY} PRIVATE ${CXX_COMPILE_FLAGS})
 
 add_test(NAME ${BINARY} COMMAND ${BINARY})

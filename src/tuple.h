@@ -9,12 +9,12 @@ class Tuple {
 
     Tuple(std::array<double, 4> elems) : m_elems{elems} {}
 
-    double x() const { return m_elems[0]; }
-    double y() const { return m_elems[1]; }
-    double z() const { return m_elems[2]; }
-    double w() const { return m_elems[3]; }
+    inline double at(std::size_t index) const { return m_elems.at(index); }
+    inline double x() const { return m_elems[0]; }
+    inline double y() const { return m_elems[1]; }
+    inline double z() const { return m_elems[2]; }
+    inline double w() const { return m_elems[3]; }
 
-    Tuple& operator=(const Tuple& other);
     Tuple operator+(const Tuple& other);
     Tuple operator-(const Tuple& other);
     Tuple operator-();
@@ -41,7 +41,8 @@ class Vector : public Tuple {
 
 class Color : public Tuple {
    public:
-    Color(double red, double green, double blue) : Tuple({red, green, blue, 0}) {}
+    Color(double red, double green, double blue)
+        : Tuple({red, green, blue, 0}) {}
     void round();
     Color& operator*=(const double scalar);
     Color operator*(const Color& other);

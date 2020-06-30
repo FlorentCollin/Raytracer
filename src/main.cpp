@@ -33,9 +33,9 @@ int main() {
     Canvas canvas(900, 500);
     Color c(1, 0.5, 0);
     for (int i = 0; proj.position.y() >= 0; i++) {
-        canvas.write_pixel(
-            std::round(proj.position.x()),
-            canvas.get_height() - 1 - std::round(proj.position.y()), c);
+        int x = static_cast<int>(std::round(proj.position.x()));
+        int y = static_cast<int>(canvas.get_height() - 1 - std::round(proj.position.y()));
+        canvas.write_pixel(x, y, c);
         proj = tick(env, proj);
     }
     std::cout << canvas.to_PPM() << '\n';

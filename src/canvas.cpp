@@ -45,11 +45,11 @@ std::string Canvas::to_PPM() {
         return val < 100 ? 3 : 4;
     };
 
-    auto const limit = [](int val) {
+    auto const limit = [](double val) {
         if (val < 0) {
             return 0;
         }
-        return val > 255 ? 255 : val;
+        return val > 255 ? 255 : static_cast<int>(val);
     };
 
     for (int y = 0; y < m_height; y++) {

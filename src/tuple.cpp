@@ -6,11 +6,6 @@
 #include <iostream>
 #include <numeric>
 
-Tuple& Tuple::operator=(const Tuple& other) {
-    m_elems = std::move(other.m_elems);
-    return *this;
-}
-
 bool Tuple::operator==(const Tuple& other) {
     const auto equal = [](double x1, double x2) {
         constexpr double EPSILON = 1e-5;
@@ -31,20 +26,6 @@ Tuple Tuple::operator+(const Tuple& other) {
     return Tuple(sum_elems);
 }
 
-Tuple Tuple::operator*(const double scalar) {
-    std::array<double, 4> multiplied_elems = {0};
-    std::transform(m_elems.begin(), m_elems.end(), multiplied_elems.begin(),
-                   [&](double a) { return a * scalar; });
-    return Tuple(multiplied_elems);
-}
-
-Tuple Tuple::operator/(const double scalar) {
-    std::array<double, 4> divided_elems = {0};
-    std::transform(m_elems.begin(), m_elems.end(), divided_elems.begin(),
-                   [&](double a) { return a / scalar; });
-    return Tuple(divided_elems);
-}
-
 Tuple Tuple::operator-(const Tuple& other) {
     std::array<double, 4> sub = {0};
     std::transform(m_elems.begin(), m_elems.end(), other.m_elems.begin(),
@@ -59,6 +40,20 @@ Tuple Tuple::operator-() {
     return Tuple(minus_elems);
 }
 
+Tuple Tuple::operator*(const double scalar) {
+    std::array<double, 4> multiplied_elems = {0};
+    std::transform(m_elems.begin(), m_elems.end(), multiplied_elems.begin(),
+                   [&](double a) { return a * scalar; });
+    return Tuple(multiplied_elems);
+}
+
+Tuple Tuple::operator/(const double scalar) {
+    std::array<double, 4> divided_elems = {0};
+    std::transform(m_elems.begin(), m_elems.end(), divided_elems.begin(),
+                   [&](double a) { return a / scalar; });
+    return Tuple(divided_elems);
+}
+
 double Vector::magnitude() {
     double sum_of_products = std::transform_reduce(
         m_elems.begin(), m_elems.end(), m_elems.begin(), 0.0);
@@ -68,7 +63,7 @@ double Vector::magnitude() {
 void Vector::normalize() {
     const double magnitude = this->magnitude();
     std::transform(m_elems.begin(), m_elems.end(), m_elems.begin(),
-                   [magnitude](double a){ return a / magnitude; });
+                   [magnitude](double a) { return a / magnitude; });
 }
 
 double Vector::dot(const Vector& other) {
