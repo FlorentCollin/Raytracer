@@ -1,6 +1,11 @@
 set(BINARY ${CMAKE_PROJECT_NAME}_tests)
 
-set(TEST_SOURCES main.cpp tuple_tests.cpp canvas_tests.cpp matrix_tests.cpp)
+set(TEST_SOURCES
+    main.cpp
+    tuple_tests.cpp
+    canvas_tests.cpp
+    matrix_tests.cpp
+    transformations_tests.cpp)
 
 add_executable(${BINARY} ${TEST_SOURCES})
 
